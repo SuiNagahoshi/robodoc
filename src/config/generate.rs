@@ -63,7 +63,6 @@ pub struct Config {
     path: PathConfig,
     output: OutputConfig,
 }
-
 impl Config {
 
     pub fn new() -> Self {
@@ -88,7 +87,7 @@ impl Default for Config {
                 language: default_language(),
                 entry_file: default_entry_file(),
             },
-            paths: PathConfig {
+            path: PathConfig {
                 output_path: default_output_path(),
                 input_path: default_input_path()
             },
