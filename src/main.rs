@@ -1,9 +1,9 @@
-use robodoc::config::generate;
+use robodoc::config::config;
 use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args[1] == "init" {
-        let config = generate::Config::new();
+        let config = config::Config::new();
         match config.to_toml() {
             Ok(toml_string) => println!("{}", toml_string),
             Err(e) => println!("エラー{}", e),
