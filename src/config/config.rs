@@ -4,6 +4,8 @@ use chrono::{Utc, FixedOffset};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CommonConfig {
+    #[serde(default = "default_license")]
+    pub license: String,
     #[serde(default = "default_empty")]
     pub project_name: String,
     #[serde(default = "default_empty")]
@@ -19,6 +21,9 @@ pub struct CommonConfig {
 }
 fn default_empty() -> String {
     "".to_string()
+}
+fn default_license() -> String {
+    "MIT or Apache-2.0".to_string()
 }
 fn default_date() -> String {
     Utc::now()
@@ -108,6 +113,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             common: CommonConfig {
+                license: default_license(),
                 project_name: default_empty(),
                 author_name: default_empty(),
                 version: default_empty(),
