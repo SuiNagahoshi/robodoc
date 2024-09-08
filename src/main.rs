@@ -1,5 +1,7 @@
 use robodoc::config::config;
 use std::env;
+use robodoc::config::config::Config;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args[1] == "init" {
@@ -12,6 +14,13 @@ fn main() {
             eprintln!("エラー{}", e);
         }
     } else if args[1] == "generate" {
-        println!("Generation...");
+        let mut config = Config::import_config("config.toml");
+        match config {
+            Ok(mut config) => {
+                println!("設定内容: {:#?}", config);
+                config = config;
+            }
+            Err(e) => eprintln!("設定ファイルの読み込みに失敗しました: {}", e),
+        }
     }
 }

@@ -5,17 +5,17 @@ use chrono::{Utc, FixedOffset};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CommonConfig {
     #[serde(default = "default_empty")]
-    project_name: String,
+    pub project_name: String,
     #[serde(default = "default_empty")]
-    author_name: String,
+    pub author_name: String,
     #[serde(default = "default_empty")]
-    version: String,
+    pub version: String,
     #[serde(default = "default_date")]
-    date: String,
+    pub date: String,
     #[serde(default = "default_empty")]
-    language: String,
+    pub language: String,
     #[serde(default = "default_empty")]
-    entry_file: String,
+    pub entry_file: String,
 }
 fn default_empty() -> String {
     "".to_string()
@@ -32,9 +32,9 @@ fn default_date() -> String {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PathConfig {
     #[serde(default = "default_output_path")]
-    output_path: String,
+    pub output_path: String,
     #[serde(default = "default_input_path")]
-    input_path: String,
+    pub input_path: String,
 }
 fn default_output_path() -> String {
     "docs/".to_string()
@@ -60,11 +60,11 @@ enum Language {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct OutputConfig {
     #[serde(default = "default_output_format")]
-    format: Format,
+    pub format: Format,
     #[serde(default = "default_output_language")]
-    document_language: Language,
+    pub document_language: Language,
     #[serde(default = "default_source_include")]
-    source_include: bool,
+    pub source_include: bool,
 }
 fn default_output_format() -> Format {
     Format::HTML
@@ -79,9 +79,9 @@ fn default_source_include() -> bool {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    common: CommonConfig,
-    path: PathConfig,
-    output: OutputConfig,
+    pub common: CommonConfig,
+    pub path: PathConfig,
+    pub output: OutputConfig,
 }
 impl Config {
     pub fn new() -> Self {
@@ -95,6 +95,12 @@ impl Config {
     pub fn generate(&self, path: &str) -> Result<(), std::io::Error> {
         let toml_string: String = self.to_toml().expect("error");
         fs::write(path, toml_string)
+    }
+
+    pub fn import_config(path: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let content = fs::read_to_string(path)?;
+        let config: Config = toml::from_str(&content)?;
+        Ok(config)
     }
 }
 
