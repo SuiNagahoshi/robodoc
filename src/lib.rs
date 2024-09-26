@@ -1,2 +1,3 @@
 pub mod config;
-mod parser;
+pub mod parser;
+mod generator;
