@@ -12,7 +12,8 @@ pub trait Tokenizer {
 use std::string::String;
 use crate::parser::token::{BlockType, Token};
 
-struct Block {
+#[derive(Debug)]
+pub struct Block {
     //start: usize,
     //end: usize,
     block_type: BlockType,
@@ -22,6 +23,7 @@ struct Block {
 
 impl Block {
     fn extract_ops(content: &str, start: &str, end: &str) -> Vec<String> {
+        println!("{:?}", content);
         let mut results = Vec::new();
         let mut remaining = content;
         while let Some(start_index) = remaining.find(start) {
@@ -33,9 +35,10 @@ impl Block {
                 break;
             }
         }
+        println!("{:?}", results);
         results
     }
-    fn split_blocks(content: &str) -> Vec<Block> {
+    pub fn split_blocks(content: &str) -> Vec<Block> {
         let mut blocks: Vec<Block> = Vec::new();
         let mut buf: Vec<String> = Self::extract_ops(content, "/**", "**/");
         /*let mut block: Block = Block {
@@ -43,6 +46,7 @@ impl Block {
             options: "".to_string(),
             source: "".to_string(),
         };*/
+        println!("{:?}", buf);
         for i in 0..(buf.len() / 2) {
             //block.options = buf[i].clone();
             //block.source = buf[i + 1].clone();
@@ -52,6 +56,7 @@ impl Block {
                 source: buf[i + 1].clone(),
             });
         }
+        println!("{:?}", blocks);
         blocks
     }
 }
