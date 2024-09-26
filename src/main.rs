@@ -1,7 +1,7 @@
 use robodoc::config::config;
 use std::env;
 use robodoc::config::config::Config;
-use robodoc::parser::parser_new::{generate_document, parse_comment_block};
+//use robodoc::parser::parser_new::{generate_document, parse_comment_block};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
