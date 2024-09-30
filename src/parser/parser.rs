@@ -8,11 +8,13 @@ pub struct TokenSet {
 pub trait Tokenizer {
     fn tokenize(&self, split: (&str, &str), ) -> Vec<TokenSet>;
 }*/
+use std::fmt;
 //use std::collections::HashMap;
 use std::string::String;
 use crate::parser::token::{BlockType, Token};
 
-struct Block {
+#[derive(Debug)]
+pub struct Block {
     //start: usize,
     //end: usize,
     block_type: BlockType,
@@ -22,28 +24,53 @@ struct Block {
 
 impl Block {
     fn extract_ops(content: &str, start: &str, end: &str) -> Vec<String> {
-        let mut results = Vec::new();
+        let mut buf = Vec::new();
         let mut remaining = content;
+        /*if Some(t) = remaining.chars().last() {
+            remaining
+        }*/
+        println!("extract remaining: {:?}", remaining);
         while let Some(start_index) = remaining.find(start) {
             let after_start = &remaining[start_index + start.len()..];
             if let Some(end_index) = after_start.find(end) {
-                results.push(after_start[..end_index].to_string());
+                buf.push(after_start[..end_index].to_string());
                 remaining = &after_start[end_index + end.len()..];
             } else {
                 break;
             }
         }
+        let mut results: Vec<String> = Vec::new();
+        for mut i in 0..buf.len() {
+            //buf[i].retain(|c| c != '\n');
+            results = buf[i].split_whitespace().map(|s| s.to_string()).collect();
+        }
+        println!("extract results: {:?}", results);
         results
     }
-    fn split_blocks(content: &str) -> Vec<Block> {
+    pub fn split_blocks(content: &str) -> Vec<Block> {
         let mut blocks: Vec<Block> = Vec::new();
+
         let mut buf: Vec<String> = Self::extract_ops(content, "/**", "**/");
         /*let mut block: Block = Block {
             block_type: BlockType::MultiLine,
             options: "".to_string(),
             source: "".to_string(),
         };*/
-        for i in 0..(buf.len() / 2) {
+        println!("block buf: {:?}", buf);
+        //let test = buf[0].split_whitespace().collect();
+        //let range = (buf.len() / 2).max(1);
+        //println!("block range: {:?}", range);
+        let mut index = 0;
+        while index < buf.len().max(2) {
+            blocks.push(Block {
+                block_type: BlockType::MultiLine,
+                options: buf[index].clone(),
+                source: buf[index + 1].clone(),
+            });
+            println!("block: {:?}", blocks);
+            index += 2;
+        }
+        /*for i in 0..range {
             //block.options = buf[i].clone();
             //block.source = buf[i + 1].clone();
             blocks.push(Block {
@@ -51,8 +78,26 @@ impl Block {
                 options: buf[i].clone(),
                 source: buf[i + 1].clone(),
             });
-        }
+            println!("block: {:?}", blocks);
+        }*/
+
         blocks
+    }
+}
+
+impl fmt::Display for Block {
+    // This trait requires `fmt` with this exact signature.
+    // このトレイトは`fmt`が想定通りのシグネチャであることを要求します。
+     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        // Write strictly the first element into the supplied output
+        // stream: `f`. Returns `fmt::Result` which indicates whether the
+        // operation succeeded or failed. Note that `write!` uses syntax which
+        // is very similar to `println!`.
+        // 厳密に最初の要素を、与えられた出力ストリーム `f` に書き込みます。
+        // `fmt::Result`を返します。これはオペレーションが成功したか否か
+        // を表します。
+        // `write!`は`println!`に非常によく似た文法を使用していることに注目。
+        write!(f, "{}", self)
     }
 }
 

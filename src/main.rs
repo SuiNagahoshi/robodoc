@@ -1,9 +1,21 @@
 use robodoc::config::config;
 use std::env;
+use std::fmt::Display;
 use robodoc::config::config::Config;
+use robodoc::parser;
 //use robodoc::parser::parser_new::{generate_document, parse_comment_block};
 
 fn main() {
+    let comment = r#"
+/**
+@Filename main.rs
+@Brief テスト
+@Author 俺
+@Date 2024
+**/
+Print("Hello World!")
+    "#;
+    println!("{}", comment);
     let args: Vec<String> = env::args().collect();
     if args[1] == "init" {
         let config = config::Config::new();
@@ -23,6 +35,8 @@ fn main() {
             }
             Err(e) => eprintln!("設定ファイルの読み込みに失敗しました: {}", e),
         }
+        let res = parser::parser::Block::split_blocks(comment);
+        println!("{:?}", res);
         /*let comment = r#"
     /**
      * @Type Function
