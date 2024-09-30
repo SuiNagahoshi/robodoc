@@ -39,17 +39,17 @@ Print("Hello World!")
         println!("{:?}", res);
         /*let comment = r#"
     /**
-     * @Type Function
-     * @Brief これはサンプルの関数です
-     * @Detail この関数はドキュメント生成ツールの例として作られました
-     * @Param x 引数xは整数
-     * @Return 結果の整数値を返します
-     */
+     @FileName test.rs
+     @Brief サンプル
+     @Detail この関数はドキュメント生成ツールの例として作られました
+     @Date x 2024
+     @Author osaki
+     **/
     "#;
 
-        let parsed_comment = parse_comment_block(comment);
-        generate_document(vec![parsed_comment], "html");
-    */}
+        let file_info_block = parser::Block::split_blocks(comment);
+        println!("{:?}", file_info_block);
+    }
 
 }
     /*

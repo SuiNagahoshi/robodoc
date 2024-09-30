@@ -88,7 +88,7 @@ impl Block {
 impl fmt::Display for Block {
     // This trait requires `fmt` with this exact signature.
     // このトレイトは`fmt`が想定通りのシグネチャであることを要求します。
-     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Write strictly the first element into the supplied output
         // stream: `f`. Returns `fmt::Result` which indicates whether the
         // operation succeeded or failed. Note that `write!` uses syntax which
