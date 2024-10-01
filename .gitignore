@@ -1,4 +1,6 @@
 # プロジェクトの除外パス
 /target/
-config.toml
+# config.toml
 *.iml
+generator/
+.idea/

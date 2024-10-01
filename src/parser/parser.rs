@@ -18,12 +18,60 @@ pub struct Block {
     //start: usize,
     //end: usize,
     block_type: BlockType,
-    options: String,
+    options_row: String,
+    options: Vec<Token>,
     source: String,
 }
-
 impl Block {
-    fn extract_ops(content: &str, start: &str, end: &str) -> Vec<String> {
+    pub fn extract_blocks(content: &str, start: &str, end: &str) -> Vec<Block> {
+        let mut blocks: Vec<Block> = Vec::new();
+        let mut buf = Vec::new();
+        let mut remaining = content;
+        while let Some(start_idx) = remaining.find(start) {
+            let after_start = &remaining[start_idx + start.len()..];
+            if let Some(end_idx) = after_start.find(end) {
+                // "start_here"と"end_here"の間の部分を取得
+                let between = &after_start[..end_idx];
+
+                // "end_here"の後の部分（次の"start_here"まで）
+                let after_end = &after_start[end_idx + end.len()..];
+                let next_start_idx = after_end.find(start);
+
+                // 次の"start_here"までの部分（次の"start_here"がない場合はNone）
+                let remainder = if let Some(idx) = next_start_idx {
+                    Some(&after_end[..idx])
+                } else {
+                    Some(after_end)  // 最後の部分
+                };
+
+                // 結果に追加
+                buf.push((between, remainder));
+
+                // 次の探索のために"end_here"の後に進める
+                remaining = after_end;
+            } else {
+                break;  // "end_here"が見つからない場合は終了
+            }
+        }
+        //blocks
+        println!("{:?}", buf);
+        for (between, remainder) in buf {
+            /*println!("Between: {}", between);
+            if let Some(remainder) = remainder {
+                println!("Remainder: {}", remainder);
+            }*/
+            if let Some(remainder) = remainder {
+                blocks.push(Block {
+                    block_type: BlockType::MultiLine,
+                    options_row: between.trim_start_matches(|c| c == ' ' || c == '\n').trim_end_matches(|c| c == ' ' || c == '\n').to_string(),
+                    options: Vec::new(),
+                    source: remainder.trim_start_matches(|c| c == ' ' || c == '\n').trim_end_matches(|c| c == ' ' || c == '\n').to_string(),
+                })
+            }
+        }
+        blocks
+    }
+    /*fn extract_ops(content: &str, start: &str, end: &str) -> Vec<String> {
         let mut buf = Vec::new();
         let mut remaining = content;
         /*if Some(t) = remaining.chars().last() {
@@ -47,6 +95,18 @@ impl Block {
         println!("extract results: {:?}", results);
         results
     }
+    /*fn set_token(content: Vec<String>) -> Vec<Token> {
+        let mut buf = content;
+        let mut token: Token;
+        let mut results: Vec<Token> = Vec::new();
+        let mut index = 0;
+        while index < buf.len().max(2) {
+
+            //println!("block: {:?}", blocks);
+            index += 2;
+        }
+        results
+    }*/
     pub fn split_blocks(content: &str) -> Vec<Block> {
         let mut blocks: Vec<Block> = Vec::new();
 
@@ -64,7 +124,8 @@ impl Block {
         while index < buf.len().max(2) {
             blocks.push(Block {
                 block_type: BlockType::MultiLine,
-                options: buf[index].clone(),
+                options_row: buf[index].clone(),
+                options: Vec::new(),
                 source: buf[index + 1].clone(),
             });
             println!("block: {:?}", blocks);
@@ -82,7 +143,7 @@ impl Block {
         }*/
 
         blocks
-    }
+    }*/
 }
 
 impl fmt::Display for Block {
@@ -171,7 +232,7 @@ impl Extractor for FileInfo {
         let row = &content[1];
         let mut buf: Vec<&str> = Vec::new();
         let mut tokens: Vec<Token> = Vec::new();
-        for line in row.options.lines() {
+        for line in row.options_row.lines() {
             buf = line.splitn(2, ' ').collect();
             for i in buf {
                 match i {

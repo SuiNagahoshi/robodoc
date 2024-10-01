@@ -2,9 +2,8 @@ use robodoc::config::config;
 use std::env;
 use std::fmt::Display;
 use robodoc::config::config::Config;
-use robodoc::parser;
+use robodoc::parser::parser;
 //use robodoc::parser::parser_new::{generate_document, parse_comment_block};
-
 fn main() {
     let comment = r#"
 /**
@@ -14,7 +13,15 @@ fn main() {
 @Date 2024
 **/
 Print("Hello World!")
-    "#;
+/**
+@Filename main.rs
+@Brief テスト
+@Author 俺
+@Date 2024
+**/
+Print("Hello World!")
+
+"#;
     println!("{}", comment);
     let args: Vec<String> = env::args().collect();
     if args[1] == "init" {
@@ -35,22 +42,26 @@ Print("Hello World!")
             }
             Err(e) => eprintln!("設定ファイルの読み込みに失敗しました: {}", e),
         }
-        let res = parser::parser::Block::split_blocks(comment);
-        println!("{:?}", res);
-        /*let comment = r#"
-    /**
-     @FileName test.rs
-     @Brief サンプル
-     @Detail この関数はドキュメント生成ツールの例として作られました
-     @Date x 2024
-     @Author osaki
-     **/
-    "#;
+        //let res: Vec<parser::Block> = parser::Block::split_blocks(comment);
+        //println!("{:?}", res);
+        let re = parser::Block::extract_blocks(comment, "/**", "**/");
+        println!("{:?}", re);
+        /*
+        let comment = r#"
+        /**
+         @FileName test.rs
+         @Brief サンプル
+         @Detail この関数はドキュメント生成ツールの例として作られました
+         @Date x 2024
+         @Author osaki
+         **/
+        "#;
 
-        let file_info_block = parser::Block::split_blocks(comment);
-        println!("{:?}", file_info_block);
+            let file_info_block = parser::Block::split_blocks(comment);
+            println!("{:?}", file_info_block);
+        }
+        */
     }
-
 }
     /*
 use std::collections::HashMap;
@@ -218,5 +229,4 @@ fn main() {
     // コンソールに出力
     println!("HTML Output:\n{}", html_output);
     println!("Markdown Output:\n{}", markdown_output);
-}
-*/
+}*/

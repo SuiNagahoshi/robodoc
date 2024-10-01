@@ -1,0 +1,17 @@
+[common]
+license = "MIT or Apache-2.0"
+project_name = ""
+author_name = ""
+version = ""
+date = "2024-09-24"
+language = ""
+entry_file = ""
+
+[path]
+output_path = "docs/"
+input_path = "src/"
+
+[output]
+format = "html"
+document_language = "japanese"
+source_include = true
