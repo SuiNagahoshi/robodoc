@@ -2,5 +2,5 @@
 /target/
 # config.toml
 *.iml
-generator/
-.idea/
+/generator/
+/.idea/
