@@ -1,6 +1,6 @@
+use chrono::{FixedOffset, Utc};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use chrono::{Utc, FixedOffset};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CommonConfig {
@@ -27,8 +27,7 @@ fn default_license() -> String {
 }
 fn default_date() -> String {
     Utc::now()
-        .with_timezone(
-            &FixedOffset::east_opt(9 * 3600).unwrap())
+        .with_timezone(&FixedOffset::east_opt(9 * 3600).unwrap())
         .naive_local()
         .date()
         .to_string()

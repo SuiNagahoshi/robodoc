@@ -1,8 +1,9 @@
 use robodoc::config::config;
-use std::env;
-use std::fmt::Display;
-use robodoc::config::config::Config;
+//use robodoc::config::config::Config;
 use robodoc::parser::parser;
+use robodoc::parser::parser::Extractor;
+use std::env;
+
 //use robodoc::parser::parser_new::{generate_document, parse_comment_block};
 fn main() {
     let comment = r#"
@@ -34,7 +35,7 @@ Print("Hello World!")
             eprintln!("エラー{}", e);
         }
     } else if args[1] == "generate" {
-        let mut config = Config::import_config("config.toml");
+        let config = config::Config::import_config("config.toml");
         match config {
             Ok(mut config) => {
                 println!("設定内容: {:#?}", config);
@@ -44,8 +45,33 @@ Print("Hello World!")
         }
         //let res: Vec<parser::Block> = parser::Block::split_blocks(comment);
         //println!("{:?}", res);
-        let re = parser::Block::extract_blocks(comment, "/**", "**/");
-        println!("{:?}", re);
+        let blocks = parser::Block::extract_blocks(comment, "/**", "**/");
+        println!("main blocks {:?}", blocks);
+        /*let _ex_block = if let Ok(v) = parser::FileInfo::extract(blocks) {
+            for block in v {
+                //let buf = block.options_raw
+                println!("{:?}", parser::FileInfo::make_token_package(block.options_raw));
+            }
+        };*/
+        let res = parser::FileInfo::extract(blocks);
+        println!("extract result {:?}", res);
+        if let Ok(r) = res {
+            for i in r {
+                println!("{}", i);
+            }
+        }
+        /*std::thread::Builder::new()
+            .stack_size(32 * 1024 * 1024) // 32MBのスタックサイズに設定
+            .spawn(|| {
+                // extract関数をここで実行
+
+            })
+            .unwrap();
+*/
+
+
+
+        //let result = parser::FileInfo::make_token_package();
         /*
         let comment = r#"
         /**
@@ -63,7 +89,7 @@ Print("Hello World!")
         */
     }
 }
-    /*
+/*
 use std::collections::HashMap;
 use std::fmt;
 

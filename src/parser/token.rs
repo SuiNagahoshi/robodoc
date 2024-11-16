@@ -1,4 +1,3 @@
-
 //#[derive(Clone, Debug)]
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Token {
@@ -10,7 +9,7 @@ pub enum Token {
     Kind(Kind),
     Param(String, String),
     Return(String, String),
-    Err(String)//一応
+    Err(String), //一応
 }
 
 //#[derive(Clone, Debug)]

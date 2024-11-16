@@ -1,3 +1,3 @@
-pub mod parser;
 mod file_details;
+pub mod parser;
 mod token;
