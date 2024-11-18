@@ -1,7 +1,7 @@
 use robodoc::config::config;
 //use robodoc::config::config::Config;
 use robodoc::parser::parser;
-use robodoc::parser::parser::Extractor;
+use robodoc::parser::parser::{Block, Extractor};
 use std::env;
 
 //use robodoc::parser::parser_new::{generate_document, parse_comment_block};
@@ -55,9 +55,21 @@ Print("Hello World!")
         };*/
         let res = parser::FileInfo::extract(blocks);
         println!("extract result {:?}", res);
-        if let Ok(r) = res {
+        /*if let Ok(r) = res {
             for i in r {
                 println!("{}", i);
+            }
+        }*/
+        if let Ok(t) = res {
+            let mut foo = Vec::new();
+            for i in t {
+                foo.push(Block {
+                    block_type: i.block_type,
+                    options_raw: Box::new(String::new()),
+                    options: i.options,
+                    source: Box::new(String::new()),
+                });
+                println!("{:?}", foo);
             }
         }
         /*std::thread::Builder::new()

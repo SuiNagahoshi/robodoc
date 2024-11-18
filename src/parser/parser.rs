@@ -17,10 +17,10 @@ use std::string::String;
 pub struct Block {
     //start: usize,
     //end: usize,
-    block_type: BlockType,
+    pub block_type: BlockType,
     pub options_raw: Box<String>,
-    options: Vec<Token>,
-    source: Box<String>,
+    pub options: Vec<Token>,
+    pub source: Box<String>,
 }
 impl Block {
     pub fn extract_blocks(content: &str, start: &str, end: &str) -> Vec<Box<Block>> {
