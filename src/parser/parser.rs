@@ -18,13 +18,13 @@ pub struct Block {
     //start: usize,
     //end: usize,
     pub block_type: BlockType,
-    pub options_raw: Box<String>,
+    //pub options_raw: Box<String>,
     pub options: Vec<Token>,
-    pub source: Box<String>,
+    //pub source: Box<String>,
 }
 impl Block {
-    pub fn extract_blocks(content: &str, start: &str, end: &str) -> Vec<Box<Block>> {
-        let mut blocks: Vec<Box<Block>> = Vec::new();
+    pub fn extract_blocks(content: &str, start: &str, end: &str) -> Vec<Box<(Block, String)>> {
+        let mut blocks: Vec<Box<(Block, String)>> = Vec::new();
         let mut buf = Vec::new();
         let mut remaining = content;
         while let Some(start_idx) = remaining.find(start) {
@@ -57,22 +57,23 @@ impl Block {
         println!("buf block: {:?}", buf);
         for (between, remainder) in buf {
             /*println!("Between: {}", between);
-            if let Some(remainder) = remainder {
-                println!("Remainder: {}", remainder);
+            if let Some(_remainder) = _remainder {
+                println!("Remainder: {}", _remainder);
             }*/
-            if let Some(remainder) = remainder {
-                blocks.push(Box::from(Block {
+            if let Some(_remainder) = remainder {
+                let b = between
+                    .trim_start_matches(|c| c == ' ' || c == '\n')
+                    .trim_end_matches(|c| c == ' ' || c == '\n')
+                    .to_string();
+                blocks.push(Box::from(
+                    (Block {
                     block_type: BlockType::MultiLine,
-                    options_raw: Box::from(between
-                        .trim_start_matches(|c| c == ' ' || c == '\n')
-                        .trim_end_matches(|c| c == ' ' || c == '\n')
-                        .to_string()),
+                    //options_raw: Box::from(b.clone()),
                     options: Vec::new(),
-                    source: Box::from(remainder
-                        .trim_start_matches(|c| c == ' ' || c == '\n')
-                        .trim_end_matches(|c| c == ' ' || c == '\n')
-                        .to_string()),
-                }))
+                    //source: Box::from(b.clone()), 
+                    }, 
+                     b.clone()
+                    )))
             }
         }
         println!("block extract: {:?}", blocks);
@@ -178,7 +179,7 @@ pub trait Extractor {
     //fn get_value(&self, key: Option<u64>, value: Option<Token>) -> Option<String>;
     //fn set_vec(&mut self, value: Token);
     fn get_value(&self, token: Token) -> Result<String, String>;
-    fn extract(content: Vec<Box<Block>>) -> Result<Vec<Box<Block>>, String>;
+    fn extract(content: Vec<Box<(Block, String)>>) -> Result<Vec<Box<Block>>, String>;
     fn convert_token(token_kind: &str, value: (String, Option<String>)) -> Result<Token, String>;
     fn make_token_package(raw: Vec<&str>) -> Result<Vec<Token>, String>;
 }
@@ -231,7 +232,7 @@ impl Extractor for FileInfo {
         }}
     }*/
 
-    fn extract(content: Vec<Box<Block>>) -> Result<Vec<Box<Block>>, String> {
+    fn extract(content: Vec<Box<(Block, String)>>) -> Result<Vec<Box<Block>>, String> {
         /*let row = &content[1];
         let mut buf: Vec<&str> = Vec::new();
         let mut tokens: Vec<Token> = Vec::new();
@@ -256,7 +257,7 @@ impl Extractor for FileInfo {
         for raw in content {
             //let raw_buf = raw.options_raw.clone();
             //let source_buf = raw.source.clone();
-            buf = raw.options_raw.split_whitespace().collect::<Vec<&str>>();
+            buf = raw.1.split_whitespace().collect::<Vec<&str>>();
             //let len = .len().max(2);
             println!("{:?}", buf);
             //let mut index = 0;
@@ -264,9 +265,9 @@ impl Extractor for FileInfo {
             println!("{:?}", ops);
             results.push(Box::from(Block {
                 block_type: BlockType::MultiLine,
-                options_raw: raw.options_raw.clone(),
+                //options_raw: raw.options_raw.clone(),
                 options: ops,
-                source: raw.source.clone(),
+                //source: Box::from(raw.1.clone()),
             }));
             /*while index < len {
                 let mut ops = super::parser::FileInfo::make_token_package(buf)?;

@@ -61,15 +61,15 @@ Print("Hello World!")
             }
         }*/
         if let Ok(t) = res {
-            let mut foo = Vec::new();
+            //let mut foo = Vec::new();
             for i in t {
-                foo.push(Block {
+                /*foo.push(Block {
                     block_type: i.block_type,
-                    options_raw: Box::new(String::new()),
+                    //options_raw: Box::new(String::new()),
                     options: i.options,
-                    source: Box::new(String::new()),
-                });
-                println!("{:?}", foo);
+                    //source: Box::new(String::new()),
+                });*/
+                println!("{:?}", i);
             }
         }
         /*std::thread::Builder::new()
