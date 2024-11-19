@@ -27,32 +27,3 @@ pub enum BlockType {
     MultiLine,
     SingleLine,
 }
-/*
-pub trait Tokenizer {
-    fn tokenize() -> Result<Token, String>;
-}
-impl Tokenizer for Token {
-    fn tokenize(&self) -> Result<Token, String> {
-
-    }
-}
-
-impl Token {
-    fn split_token(c: &str) -> Token {
-        let t: Vec<&str> = c.splitn(3, ' ').collect();
-    }
-}*/
-/*
-impl fmt::Display for Kind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let s = match self {
-            Kind::Fn => "Fn",
-            Kind::Cls => "Cls",
-            Kind::Srt => "Srt",
-            Kind::Enm => "Enm",
-            Kind::Val => "Val",
-            _ => "error",
-        };
-        write!(f, "{}",  s)
-    }
-}*/
