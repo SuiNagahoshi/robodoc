@@ -1,5 +1,4 @@
-//#[derive(Clone, Debug)]
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum Token {
     FileName(String),
     Brief(String),
@@ -12,8 +11,7 @@ pub enum Token {
     Err(String), //一応
 }
 
-//#[derive(Clone, Debug)]
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
 enum Kind {
     Fn,
     Cls,
@@ -22,7 +20,7 @@ enum Kind {
     Val(String, String),
 }
 
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum BlockType {
     MultiLine,
     SingleLine,

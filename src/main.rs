@@ -10,14 +10,14 @@ fn main() {
 @Filename main.rs
 @Brief テスト
 @Author 俺
-@Date 2024
+@Date 2024-11-20
 **/
 Print("Hello World!")
 /**
 @Filename main.rs
 @Brief テスト
 @Author 俺
-@Date 2024
+@Date 2024-11-20
 **/
 Print("Hello World!")
 
@@ -44,12 +44,13 @@ Print("Hello World!")
         }
         let blocks = parser::Block::extract_blocks(comment, "/**", "**/");
         println!("main blocks {:?}", blocks);
-        let res = parser::FileInfo::extract(blocks);
+        //let block = blocks[0].clone();
+        let res = parser::FileInfo::extract(blocks[0].clone());
         println!("extract result {:?}", res);
-        if let Ok(t) = res {
+        /*if let Ok(t) = res {
             for i in t {
                 println!("{:?}", i);
             }
-        }
+        }*/
     }
 }
