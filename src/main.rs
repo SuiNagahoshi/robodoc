@@ -45,8 +45,8 @@ Print("Hello World!")
         let blocks = parser::Block::extract_blocks(comment, "/**", "**/");
         println!("main blocks {:?}", blocks);
         //let block = blocks[0].clone();
-        let res = parser::FileInfo::extract(blocks[0].clone());
-        println!("extract result {:?}", res);
+        //let res = parser::FileInfo::extract(blocks[0].clone());
+        //println!("extract result {:?}", res);
         /*if let Ok(t) = res {
             for i in t {
                 println!("{:?}", i);

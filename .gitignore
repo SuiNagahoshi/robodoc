@@ -4,3 +4,4 @@ config.toml
 *.iml
 /generator/
 /.idea/*
+*.xml

@@ -1,7 +1,17 @@
+use crate::parser::parser::FileInfo;
+
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
+pub enum FileInfoToken {
+    FileName(String),
+    Description(String),
+    Author(String),
+    Date(String),
+}
+/*
 #[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum Token {
     FileName(String),
-    Brief(String),
+    Description(String),
     Author(String),
     Date(String),
     Details(String),
@@ -10,8 +20,9 @@ pub enum Token {
     Return(String, String),
     Err(String), //一応
 }
+*/
 
-#[derive(Hash, Eq, PartialEq, Debug, Clone)]
+#[derive(Debug, Clone)]
 enum Kind {
     Fn,
     Cls,
@@ -20,8 +31,13 @@ enum Kind {
     Val(String, String),
 }
 
-#[derive(Hash, Eq, PartialEq, Debug, Clone)]
-pub enum BlockType {
+#[derive(Debug, Clone)]
+pub enum LineType {
     MultiLine,
     SingleLine,
+}
+#[derive(Debug, Clone)]
+pub enum BlockType {
+    Raw(String),
+    FileInfo(FileInfo),
 }
