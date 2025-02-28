@@ -1,6 +1,6 @@
 use chrono::{FixedOffset, Utc};
 use std::fs;
-use std::path::PathBuf;
+use std::path;
 use toml;
 use crate::config::structure::{CommonConfig, Config, InputConfig, OutputConfig};
 
@@ -16,16 +16,16 @@ impl Config {
                 description: None,
             },
             input: InputConfig { 
-                path: PathBuf::from("./src"),
+                path: path::PathBuf::from("./src"),
                 language: vec![] },
             output: OutputConfig {
-                path: PathBuf::from("./docs"),
+                path: path::PathBuf::from("./docs"),
                 language: vec![],
                 format: vec![],
             },
         }
     }
-    pub fn generate(&self, path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn generate(&self, path: &path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
         let content = toml::to_string(self)?;
         fs::write(path, content)?;
         Ok(())
@@ -37,7 +37,7 @@ mod tests {
     use super::*;
     #[test]
     fn test_generate_config() {
-        let config = Config::new().generate(&PathBuf::from("config.toml"));
+        let config = Config::new().generate(&path::PathBuf::from("config.toml"));
         let content = fs::read_to_string("config.toml").unwrap();
         let c = r#"[common]
 project_name = ""

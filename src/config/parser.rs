@@ -1,8 +1,8 @@
 use std::fs;
-use std::path::Path;
+use std::path;
 use crate::config::structure::Config;
 impl Config {
-    pub fn import<P: AsRef<Path>>(path: P) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn import<P: AsRef<path::Path>>(path: P) -> Result<Self, Box<dyn std::error::Error>> {
         let content = fs::read_to_string(path)?;
         let config: Config = toml::from_str(&content)?;
         Ok(config)
@@ -11,7 +11,7 @@ impl Config {
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
+    use std::path;
     use crate::config::structure::{Config, SourceLanguage, OutputLanguage, Format};
 
     #[test]
@@ -45,11 +45,11 @@ format = ["HTML"]
         for lang in &config.input.language {
             assert!(matches!(lang, SourceLanguage::Rust));
         }
-        assert_eq!(config.input.path, PathBuf::from("./src"));
+        assert_eq!(config.input.path, path::PathBuf::from("./src"));
         for lang in &config.output.language {
             assert!(matches!(lang, OutputLanguage::Japanese | OutputLanguage::English));
         }
-        assert_eq!(config.output.path, PathBuf::from("./output"));
+        assert_eq!(config.output.path, path::PathBuf::from("./output"));
         for format in &config.output.format {
             assert!(matches!(format, Format::HTML));
         }
