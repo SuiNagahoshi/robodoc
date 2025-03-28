@@ -42,8 +42,8 @@ mod tests {
     use super::*;
     #[test]
     fn test_generate_config() {
-        let config = Config::new().generate(&path::PathBuf::from("config.toml"));
-        let content = fs::read_to_string("config.toml").unwrap();
+        let _config = Config::new().generate(&path::PathBuf::from("config.toml"));
+        let _content = fs::read_to_string("config.toml").unwrap();
         /*let c = r#"[common]
         project_name = ""
         date = "2025-03-13"

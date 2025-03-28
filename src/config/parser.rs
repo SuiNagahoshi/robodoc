@@ -32,7 +32,7 @@ language = ["Rust"]
 [output]
 path = "./output"
 language = ["Japanese"]
-format = ["HTML"]
+format = ["Html"]
 "#;
         let config: Config = toml::from_str(toml_str).expect("Failed to parse toml");
         assert_eq!(config.common.license.as_deref(), Some("Apache-2.0"));
@@ -53,7 +53,7 @@ format = ["HTML"]
         }
         assert_eq!(config.output.path, path::PathBuf::from("./output"));
         for format in &config.output.format {
-            assert!(matches!(format, Format::HTML));
+            assert!(matches!(format, Format::Html));
         }
     }
 }
