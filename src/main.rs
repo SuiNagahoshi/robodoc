@@ -12,10 +12,10 @@ fn main() {
     if args[1] == "init" {
         println!("Initializing...");
         let config = Config::new();
-        config.generate(&path::PathBuf::from("config.toml"));
+        let _ = config.generate(&path::PathBuf::from("config.toml"));
     } else if args[1] == "generate" {
         println!("Generating...");
-        let config = Config::import(&path::PathBuf::from("config.toml"));
+        let config = Config::import(path::PathBuf::from("config.toml"));
         println!("{:?}", config);
     } else {
         eprintln!("Argument error! Please provide one argument.\n'init', 'generate'");

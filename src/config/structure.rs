@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
+use std::path::PathBuf;
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub common: CommonConfig,
@@ -38,7 +38,7 @@ pub enum OutputLanguage {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub enum Format {
-    HTML
+    Html,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
