@@ -20,7 +20,7 @@ mod tests {
 [common]
 license = "Apache-2.0"
 project_name = "project"
-date = "2025-02-18"
+date = "2025-04-11"
 author = "user"
 version = "0.1.0"
 description = "This is a test"
@@ -37,7 +37,7 @@ format = ["Html"]
         let config: Config = toml::from_str(toml_str).expect("Failed to parse toml");
         assert_eq!(config.common.license.as_deref(), Some("Apache-2.0"));
         assert_eq!(config.common.project_name, "project");
-        assert_eq!(config.common.date, "2025-02-18");
+        assert_eq!(config.common.date, "2025-04-11");
         assert_eq!(config.common.author, "user");
         assert_eq!(config.common.version, "0.1.0");
         assert_eq!(config.common.description.as_deref(), Some("This is a test"));

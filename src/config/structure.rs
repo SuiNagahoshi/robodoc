@@ -22,6 +22,7 @@ pub struct CommonConfig {
 #[derive(PartialEq)]
 pub enum SourceLanguage {
     Rust,
+    Text,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
