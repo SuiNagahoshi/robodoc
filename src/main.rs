@@ -1,6 +1,7 @@
 mod config;
 mod scanner;
 use crate::config::structure::Config;
+use crate::scanner::scanner::*;//scan_files;
 
 use std::env;
 use std::path;
@@ -18,7 +19,8 @@ fn main() {
         println!("Generating...");
         let config = Config::import(path::PathBuf::from("config.toml"));
         println!("{:?}", config);
-
+        //println!("{:?}", config.unwrap().input.path);
+        scan_files(config.unwrap().input.path);
     } else {
         eprintln!("Argument error! Please provide one argument.\n'init', 'generate'");
     }

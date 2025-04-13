@@ -9,3 +9,4 @@ edition = "2021"
 chrono = "0.4.39"
 serde = { version = "1.0.217", features = ["derive"] }
 toml = "0.8.20"
+walkdir = "2.5.0"
