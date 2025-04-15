@@ -22,18 +22,18 @@ impl SourceFile {
             _ => "txt",
         }
     }
-
-
 }
-pub fn scan_files(path: PathBuf)/* -> Vec<SourceFile>*/ {
+pub fn scan_files(path: PathBuf) /* -> Vec<SourceFile>*/
+{
     let mut list: Vec<SourceFile> = Vec::new();
     let allow_extensions = vec!["rs".to_string(), "txt".to_string()];
     let entries: Vec<_> = WalkDir::new(path)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter(|e| {
-            e.file_type().is_file() &&
-                e.path().extension()
+            e.file_type().is_file()
+                && e.path()
+                    .extension()
                     .and_then(|ext| ext.to_str())
                     .map(|ext_str| allow_extensions.contains(&ext_str.to_lowercase()))
                     .unwrap_or(false)
@@ -41,11 +41,18 @@ pub fn scan_files(path: PathBuf)/* -> Vec<SourceFile>*/ {
         .collect();
     entries.iter().for_each(|entry| {
         let path = entry.path();
-        let file_name = path.file_name().and_then(|s| s.to_str()).unwrap_or("Unknown");
+        let file_name = path
+            .file_name()
+            .and_then(|s| s.to_str())
+            .unwrap_or("Unknown");
         let extension = path.extension().and_then(|s| s.to_str()).unwrap_or("None");
 
-        println!("Path: {}\n  File: {}\n  Ext: {}\n",
-                 path.display(), file_name, extension);
+        println!(
+            "Path: {}\n  File: {}\n  Ext: {}\n",
+            path.display(),
+            file_name,
+            extension
+        );
         list.push(SourceFile {
             file_ext: SourceFile::convert_to_lang_type(extension),
             path: path.to_owned(),
