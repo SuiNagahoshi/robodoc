@@ -20,9 +20,29 @@ pub struct CommonConfig {
 #[derive(Debug, Deserialize, Serialize)]
 //#[serde(rename_all = "PascalCase")]
 #[derive(PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SourceLanguage {
     Rust,
-    Text,
+    Cpp,
+    Python,
+    Java,
+    JavaScript,
+    Arduino,
+    Unknown,
+}
+
+impl SourceLanguage {
+    pub fn from_extension(extension: &str) -> Self {
+        match extension {
+            "rs" => SourceLanguage::Rust,
+            "cpp" | "hpp" | "c" | "h" => SourceLanguage::Cpp,
+            "py" => SourceLanguage::Python,
+            "java" => SourceLanguage::Java,
+            "js" | "ts" => SourceLanguage::JavaScript,
+            "ino" => SourceLanguage::Unknown,
+            _ => SourceLanguage::Unknown,
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
