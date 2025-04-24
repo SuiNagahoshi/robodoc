@@ -2,77 +2,59 @@ use crate::config::structure::SourceLanguage;
 
 use std::path::PathBuf;
 use walkdir::WalkDir;
+use anyhow;
 #[derive(Debug)]
 pub struct SourceFile {
-    file_ext: SourceLanguage,
-    path: std::path::PathBuf,
-    file_name: String,
+    pub file_ext: SourceLanguage,
+    pub path: std::path::PathBuf,
+    pub file_name: String,
+    pub source: String,
 }
-impl SourceFile {
-    pub fn convert_to_lang_type(ext: &str) -> SourceLanguage {
-        match ext {
-            "rs" => SourceLanguage::Rust,
-            _ => SourceLanguage::Text,
+
+pub fn scan_files(path: PathBuf) -> anyhow::Result<Vec<SourceFile>> {
+    let mut result = Vec::new();
+    let files = WalkDir::new(&path).into_iter().filter_map(Result::ok).filter(|e| e.file_type().is_file());
+
+    for file in files {
+        let path = file.path().to_path_buf();
+        if let Some(extension) = path.extension().and_then(|s| s.to_str()) {
+            let lang = SourceLanguage::from_extension(extension);
+            if lang != SourceLanguage::Unknown {
+                let content = std::fs::read_to_string(&path)?;
+                result.push(SourceFile {
+                    file_ext: lang,
+                    path: path.clone(),
+                    file_name: path.file_name().and_then(|s| s.to_str()).unwrap_or_default().to_string(),
+                    source: content,
+                })
+            }
         }
     }
-
-    pub fn convert_to_extension(lang_type: SourceLanguage) -> &'static str {
-        match lang_type {
-            SourceLanguage::Rust => "rs",
-            _ => "txt",
-        }
-    }
-}
-pub fn scan_files(path: PathBuf) /* -> Vec<SourceFile>*/
-{
-    let mut list: Vec<SourceFile> = Vec::new();
-    let allow_extensions = vec!["rs".to_string(), "txt".to_string()];
-    let entries: Vec<_> = WalkDir::new(path)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.file_type().is_file()
-                && e.path()
-                    .extension()
-                    .and_then(|ext| ext.to_str())
-                    .map(|ext_str| allow_extensions.contains(&ext_str.to_lowercase()))
-                    .unwrap_or(false)
-        })
-        .collect();
-    entries.iter().for_each(|entry| {
-        let path = entry.path();
-        let file_name = path
-            .file_name()
-            .and_then(|s| s.to_str())
-            .unwrap_or("Unknown");
-        let extension = path.extension().and_then(|s| s.to_str()).unwrap_or("None");
-
-        println!(
-            "Path: {}\n  File: {}\n  Ext: {}\n",
-            path.display(),
-            file_name,
-            extension
-        );
-        list.push(SourceFile {
-            file_ext: SourceFile::convert_to_lang_type(extension),
-            path: path.to_owned(),
-            file_name: file_name.to_owned(),
-        });
-    });
-    println!("{:?}", list);
+    Ok(result)
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::config::structure::SourceLanguage;
-    use crate::scanner::scanner::SourceFile;
-    #[test]
-    fn test_convert_to_lang_type() {
-        assert_eq!(SourceLanguage::Rust, SourceFile::convert_to_lang_type("rs"));
-    }
+    // tests/test_scanner.rs
+    use std::fs;
+    use tempfile::tempdir;
+    use super::*;
 
     #[test]
-    fn test_convert_to_extension() {
-        assert_eq!("rs", SourceFile::convert_to_extension(SourceLanguage::Rust));
+    fn test_find_source_files_rust_and_python() {
+        let dir = tempdir().unwrap();
+        let rust_file_path = dir.path().join("main.rs");
+        let py_file_path = dir.path().join("script.py");
+
+        fs::write(&rust_file_path, "fn main() {}\n").unwrap();
+        fs::write(&py_file_path, "print(\"hello\")\n").unwrap();
+
+        let paths = dir.path().to_string_lossy().to_string();
+        let files = scan_files(paths.into()).unwrap();
+
+        assert_eq!(files.len(), 2);
+        assert!(files.iter().any(|f| f.file_ext == SourceLanguage::Rust));
+        assert!(files.iter().any(|f| f.file_ext == SourceLanguage::Python));
     }
+
 }

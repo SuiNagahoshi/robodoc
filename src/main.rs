@@ -2,7 +2,7 @@ mod analyzer; ///mod analyzer import module
 mod config;
 mod scanner;
 //use crate::analyzer::{output, python};
-use crate::analyzer::rust;
+use crate::analyzer::{extractor, output};
 use crate::config::structure::Config;
 use crate::scanner::scanner::scan_files;
 use std::env;
@@ -32,9 +32,9 @@ fn main() {
         let config = Config::import(path::PathBuf::from("config.toml"));
         println!("{:?}", config);
         //println!("{:?}", config.unwrap().input.path);
-        scan_files(config.unwrap().input.path);
+        //scan_files(config.unwrap().input.path);
+        output::output();
 
-        rust::extract();
     } else {
         eprintln!("Argument error! Please provide one argument.\n'init', 'generate'");
     }

@@ -17,9 +17,7 @@ pub struct CommonConfig {
     pub description: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-//#[serde(rename_all = "PascalCase")]
-#[derive(PartialEq)]
+#[derive(Deserialize, Serialize)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SourceLanguage {
     Rust,
