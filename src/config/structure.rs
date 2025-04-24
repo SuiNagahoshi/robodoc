@@ -17,8 +17,7 @@ pub struct CommonConfig {
     pub description: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SourceLanguage {
     Rust,
     Cpp,

@@ -1,10 +1,10 @@
-mod analyzer; ///mod analyzer import module
+mod analyzer;
+///mod analyzer import module
 mod config;
 mod scanner;
 //use crate::analyzer::{output, python};
 use crate::analyzer::{extractor, output};
 use crate::config::structure::Config;
-use crate::scanner::scanner::scan_files;
 use std::env;
 use std::path;
 
@@ -25,7 +25,8 @@ fn main() {
     */
     if args[1] == "init" {
         println!("Initializing...");
-        let config = Config::new();///var config create config
+        let config = Config::new();
+        ///var config create config
         let _ = config.generate(&path::PathBuf::from("config.toml"));
     } else if args[1] == "generate" {
         println!("Generating...");
@@ -34,7 +35,6 @@ fn main() {
         //println!("{:?}", config.unwrap().input.path);
         //scan_files(config.unwrap().input.path);
         output::output();
-
     } else {
         eprintln!("Argument error! Please provide one argument.\n'init', 'generate'");
     }

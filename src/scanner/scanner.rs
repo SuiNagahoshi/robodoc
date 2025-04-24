@@ -1,8 +1,8 @@
 use crate::config::structure::SourceLanguage;
 
+use anyhow;
 use std::path::PathBuf;
 use walkdir::WalkDir;
-use anyhow;
 #[derive(Debug)]
 pub struct SourceFile {
     pub file_ext: SourceLanguage,
@@ -13,7 +13,10 @@ pub struct SourceFile {
 
 pub fn scan_files(path: PathBuf) -> anyhow::Result<Vec<SourceFile>> {
     let mut result = Vec::new();
-    let files = WalkDir::new(&path).into_iter().filter_map(Result::ok).filter(|e| e.file_type().is_file());
+    let files = WalkDir::new(&path)
+        .into_iter()
+        .filter_map(Result::ok)
+        .filter(|e| e.file_type().is_file());
 
     for file in files {
         let path = file.path().to_path_buf();
@@ -24,7 +27,11 @@ pub fn scan_files(path: PathBuf) -> anyhow::Result<Vec<SourceFile>> {
                 result.push(SourceFile {
                     file_ext: lang,
                     path: path.clone(),
-                    file_name: path.file_name().and_then(|s| s.to_str()).unwrap_or_default().to_string(),
+                    file_name: path
+                        .file_name()
+                        .and_then(|s| s.to_str())
+                        .unwrap_or_default()
+                        .to_string(),
                     source: content,
                 })
             }
@@ -36,9 +43,9 @@ pub fn scan_files(path: PathBuf) -> anyhow::Result<Vec<SourceFile>> {
 #[cfg(test)]
 mod tests {
     // tests/test_scanner.rs
+    use super::*;
     use std::fs;
     use tempfile::tempdir;
-    use super::*;
 
     #[test]
     fn test_find_source_files_rust_and_python() {
@@ -56,5 +63,4 @@ mod tests {
         assert!(files.iter().any(|f| f.file_ext == SourceLanguage::Rust));
         assert!(files.iter().any(|f| f.file_ext == SourceLanguage::Python));
     }
-
 }

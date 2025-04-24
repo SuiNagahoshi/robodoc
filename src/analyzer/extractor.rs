@@ -6,8 +6,8 @@ use crate::scanner::scanner;
 /// コメント種別
 #[derive(Debug, PartialEq)]
 pub enum CommentType {
-    Block,   // /** ... */
-    Line,    // /// ...
+    Block, // /** ... */
+    Line,  // /// ...
 }
 
 /// コメント情報
@@ -42,7 +42,7 @@ pub fn extract_comments(source: &scanner::SourceFile) -> Vec<Comment> {
                 comment_type: CommentType::Line,
                 content: cap[1].trim().to_string(),
                 file: source.path.clone(),
-                line: i+1,
+                line: i + 1,
             })
         }
     }
@@ -54,8 +54,8 @@ pub fn extract_comments(source: &scanner::SourceFile) -> Vec<Comment> {
 #[cfg(test)]
 mod tests {
     // tests/test_extractor.rs
-    use crate::scanner::scanner::SourceFile;
     use crate::config::structure::SourceLanguage;
+    use crate::scanner::scanner::SourceFile;
     //use rustdocgen::extractor::{extract_comments_from_source, CommentType};
     use super::*;
 
@@ -65,7 +65,9 @@ mod tests {
             file_ext: SourceLanguage::Rust,
             path: "test.rs".into(),
             file_name: "test.rs".to_string(),
-            source: "/**\n@type function\n@name hello\n@description This is a test.\n*/\nfn hello() {}".to_string(),
+            source:
+                "/**\n@type function\n@name hello\n@description This is a test.\n*/\nfn hello() {}"
+                    .to_string(),
         };
 
         let comments = extract_comments(&file);
@@ -88,5 +90,4 @@ mod tests {
         assert_eq!(comments[0].comment_type, CommentType::Line);
         assert!(comments[0].content.contains("function"));
     }
-
 }
